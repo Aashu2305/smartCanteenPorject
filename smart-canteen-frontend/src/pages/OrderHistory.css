@@ -1,0 +1,128 @@
+.order-history-container {
+    padding: 30px;
+    background: #f8f9fa;
+    min-height: 100vh;
+}
+
+.order-history-container h1 {
+    font-size: 2.2rem;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.empty-msg {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+}
+
+.orders-list {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.order-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    backdrop-filter: blur(8px);
+}
+
+.order-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.order-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.order-date {
+    font-size: 0.9rem;
+    color: #777;
+}
+
+.order-status {
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.order-status.completed {
+    background: #d4edda;
+    color: #155724;
+}
+
+.order-status.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.order-status.cancelled {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.order-items {
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 0.95rem;
+}
+
+.item-quantity {
+    color: #555;
+}
+
+.item-name {
+    flex: 1;
+    margin: 0 8px;
+}
+
+.item-price {
+    font-weight: 500;
+}
+
+.order-card-footer {
+    border-top: 1px solid #eee;
+    margin-top: 10px;
+    padding-top: 10px;
+    text-align: right;
+    font-size: 1rem;
+}
+
+.skeleton-loader {
+    text-align: center;
+    font-size: 1.2rem;
+    padding: 50px;
+    animation: pulse 1.5s infinite ease-in-out;
+    color: #999;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+
+body {
+  padding-top: 60px; /* same height as your navbar */
+}
+
+.main-content {
+  margin-top: 60px; /* adjust according to navbar height */
+}
+

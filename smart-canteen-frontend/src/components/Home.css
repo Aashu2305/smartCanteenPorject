@@ -1,0 +1,122 @@
+.hero-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5%;
+  height: 90vh;
+  padding-top: 120px;
+  background: linear-gradient(180deg, #fffaf5, #fff0e1);
+  overflow: hidden;
+  position: relative;
+
+  /* This is crucial for the 3D effect to work */
+  perspective: 1000px;
+}
+
+.hero-content {
+  flex: 1;
+  padding-right: 40px;
+  z-index: 2;
+  animation: fadeInFromLeft 0.8s ease-out;
+}
+
+.hero-headline {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 800;
+  color: #3a2e2a;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+
+.hero-subheadline {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: #5c4d48;
+  max-width: 500px;
+  margin-bottom: 30px;
+}
+
+.hero-cta-button {
+  display: inline-block;
+  padding: 15px 35px;
+  background: linear-gradient(135deg, #ff7a56, #ff5722);
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 999px;
+  box-shadow: 0 4px 15px rgba(255, 87, 34, 0.4);
+  transition: all 0.3s ease;
+  animation: pulse 2s infinite;
+}
+
+.hero-cta-button:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(255, 87, 34, 0.5);
+  animation-play-state: paused;
+}
+
+/* --- The Visuals and Animations --- */
+
+.hero-visual {
+  flex: 1;
+  position: relative;
+  height: 100%;
+
+  /* This tells the container to respect 3D transformations of its children */
+  transform-style: preserve-3d;
+  /* This makes the tilt effect smooth */
+  transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.floating-icon {
+  position: absolute;
+  font-size: 5rem;
+  text-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  /* The icons will now inherit their floating animation from the parent's transform */
+  animation: float 10s ease-in-out infinite;
+}
+
+
+/* Adjust icon positions and animations if needed */
+.icon-1 { top: 10%; left: 20%; animation-duration: 12s; }
+.icon-2 { top: 30%; left: 60%; animation-duration: 15s; font-size: 4rem; animation-delay: -3s; }
+.icon-3 { top: 65%; left: 30%; animation-duration: 10s; font-size: 6rem; animation-delay: -7s; }
+.icon-4 { top: 50%; left: 80%; animation-duration: 13s; font-size: 3.5rem; animation-delay: -5s; }
+
+
+@keyframes fadeInFromLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 4px 15px rgba(255, 87, 34, 0.4); }
+  50% { box-shadow: 0 4px 25px rgba(255, 87, 34, 0.6); }
+  100% { box-shadow: 0 4px 15px rgba(255, 87, 34, 0.4); }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px) rotate(0deg) translateZ(0); }
+  50% { transform: translateY(-30px) rotate(20deg) translateZ(20px); }
+  100% { transform: translateY(0px) rotate(0deg) translateZ(0); }
+}
+
+@media (max-width: 768px) {
+  /* Inside your @media (max-width: 768px) rule */
+
+.hero-section {
+  flex-direction: column;
+  height: auto;
+  padding: 150px 5% 190px 5%;
+  text-align: center;
+  align-items: center; /* 👇 THIS IS THE FIX 👇 */
+}
+  .hero-content {
+    padding-right: 0;
+    margin-bottom: 40px;
+  }
+
+  .hero-visual {
+    height: 300px;
+    width: 100%;
+  }
+}
