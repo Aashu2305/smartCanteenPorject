@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import './Navbar.css';
 import AboutModal from './AboutModal';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaInstagram, FaYoutube, FaBars, FaTimes, FaSearch, FaUserCircle } from 'react-icons/fa';
 import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
 
 const mobileNavLinks = [
-  { name: 'Home', href: '#home' },
-  { name: 'Menu', href: '#menu' },
+  { name: 'Home', href: '/' },
+  { name: 'Menu', href: '/#menu' },
   { name: 'Cart', href: '#!', isCart: true },
   { name: 'About', href: '#!', isAbout: true },
 ];
@@ -22,6 +22,7 @@ function Navbar({ setSearchTerm }) {
   const { cart, toggleCart } = useContext(CartContext);
   const { user, logout } = useContext(AuthContext);
   const profileMenuRef = useRef(null);
+  const navigate = useNavigate();
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -41,18 +42,35 @@ function Navbar({ setSearchTerm }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [profileMenuRef]);
 
-  const handleLogoClick = () => { window.location.reload(); };
+  const handleLogoClick = () => {
+    // Navigate to home and scroll to top
+    navigate('/');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  
+  const handleHomeClick = (e) => {
+    e.preventDefault();
+    navigate('/');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
   
   const handleMobileLinkClick = (link) => {
     setIsMobileMenuOpen(false);
-    if (link.isAbout) setIsAboutOpen(true);
-    if (link.isCart) toggleCart();
+    if (link.isAbout) {
+        setIsAboutOpen(true);
+    } else if (link.isCart) {
+        toggleCart();
+    } else {
+        // For standard links like Home and Menu, let the browser handle navigation
+    }
   };
   
   const toggleSearch = () => {
     const newSearchState = !isSearchOpen;
     setIsSearchOpen(newSearchState);
-    if (!newSearchState) setSearchTerm('');
+    if (!newSearchState) {
+      setSearchTerm('');
+    }
   };
 
   return (
@@ -62,16 +80,23 @@ function Navbar({ setSearchTerm }) {
           <div className="logo-circle" onClick={handleLogoClick}>🍽️</div>
         </div>
         <div className="nav-section-middle">
-          <a href="#home">Home</a>
-          <a href="#menu">Menu</a>
+          <Link to="/" onClick={handleHomeClick}>Home</Link>
+          <Link to="/#menu" state={{ timestamp: Date.now() }}>Menu</Link>
           <a href="#!" onClick={(e) => { e.preventDefault(); setIsAboutOpen(true); }}>About</a>
-          <a href="https://instagram.com/yourid" target="_blank" rel="noreferrer" className="social-icon-desktop"><FaInstagram /></a>
-          <a href="https://youtube.com/yourid" target="_blank" rel="noreferrer" className="social-icon-desktop"><FaYoutube /></a>
         </div>
         <div className="nav-section-right">
+          <a href="https://instagram.com/yourid" target="_blank" rel="noreferrer" className="social-icon-desktop"><FaInstagram /></a>
+          <a href="https://youtube.com/yourid" target="_blank" rel="noreferrer" className="social-icon-desktop"><FaYoutube /></a>
           <div className="search-container">
-            <input type="text" placeholder="Search..." className={`search-input ${isSearchOpen ? 'open' : ''}`} onChange={(e) => setSearchTerm(e.target.value)} />
-            <div className="search-icon-toggle" onClick={toggleSearch}>{isSearchOpen ? <FaTimes /> : <FaSearch />}</div>
+            <input 
+              type="text" 
+              placeholder="Search..." 
+              className={`search-input ${isSearchOpen ? 'open' : ''}`} 
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <div className="search-icon-toggle" onClick={toggleSearch}>
+              {isSearchOpen ? <FaTimes /> : <FaSearch />}
+            </div>
           </div>
           <div className="cart-icon-wrapper" onClick={toggleCart}>
             <FaShoppingCart className="cart-icon"/>
@@ -84,7 +109,6 @@ function Navbar({ setSearchTerm }) {
                 <span>{user.username}</span>
                 {isProfileOpen && (
                   <div className="profile-dropdown">
-                    {/* 👇 This is the new link */}
                     <Link to="/my-orders" onClick={() => setIsProfileOpen(false)}>My Orders</Link>
                     <a href="#!" onClick={() => { logout(); setIsProfileOpen(false); }}>Logout</a>
                   </div>
@@ -110,7 +134,18 @@ function Navbar({ setSearchTerm }) {
 
       <div className={`mobile-menu ${isMobileMenuOpen ? 'open' : ''}`}>
         {mobileNavLinks.map((link, index) => (
-          <a key={link.name} href={link.href} style={{ '--animation-order': index }} onClick={() => handleMobileLinkClick(link)}>
+          <a 
+            key={link.name} 
+            href={link.href} 
+            style={{ '--animation-order': index }} 
+            onClick={(e) => {
+                if (link.href.startsWith('/#')) {
+                    e.preventDefault();
+                    navigate(link.href.substring(1)); // Programmatically navigate for smooth scroll
+                }
+                handleMobileLinkClick(link);
+            }}
+          >
             {link.name}
           </a>
         ))}

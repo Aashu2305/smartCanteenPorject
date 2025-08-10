@@ -7,7 +7,8 @@ import Cart from './components/Cart';
 import Footer from './components/Footer';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
-import OrderHistory from './pages/OrderHistory'; // 👈 Import OrderHistory
+import OrderHistory from './pages/OrderHistory';
+import useHashLinkScroll from './hooks/useHashLinkScroll'; // 👈 This is the missing import line
 
 function MainLayout({ searchTerm }) {
   return (
@@ -21,7 +22,8 @@ function MainLayout({ searchTerm }) {
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
-  
+  useHashLinkScroll(); // This call is now valid because of the import
+
   return (
     <>
       <Navbar setSearchTerm={setSearchTerm} />
@@ -30,7 +32,7 @@ function App() {
         <Route path="/" element={<MainLayout searchTerm={searchTerm} />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/my-orders" element={<OrderHistory />} /> {/* 👈 Add route */}
+        <Route path="/my-orders" element={<OrderHistory />} />
       </Routes>
     </>
   );
