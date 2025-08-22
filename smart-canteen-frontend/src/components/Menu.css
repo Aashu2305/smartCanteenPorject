@@ -1,31 +1,35 @@
+/* --- Main Menu Section --- */
 .menu-section {
+  margin-top: 100vh;
+  scroll-margin-top: 120px;
   padding: 80px 5%;
   background: #f9fafb;
 }
 
+/* --- Centered Headers and Tabs --- */
+.menu-heading-container,
+.menu-tabs {
+  padding: 0;
+}
 .menu-heading-container {
   text-align: center;
   margin-bottom: 40px;
 }
-
 .menu-main-heading {
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 700;
   color: #1a2533;
 }
-
 .menu-subheading {
   font-size: clamp(1rem, 2vw, 1.2rem);
   color: #5a6778;
 }
-
 .menu-tabs {
   display: flex;
   justify-content: center;
   gap: 20px;
   margin-bottom: 50px;
 }
-
 .tab-button {
   padding: 12px 25px;
   font-size: 1.1rem;
@@ -37,35 +41,20 @@
   cursor: pointer;
   transition: all 0.3s ease;
 }
+.tab-button:hover { color: #ff7a56; }
+.tab-button.active { color: #ff5722; border-bottom-color: #ff5722; }
 
-.tab-button:hover {
-  color: #ff7a56;
-}
+.menu-content { animation: fadeIn 0.5s ease-in-out; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-.tab-button.active {
-  color: #ff5722;
-  border-bottom-color: #ff5722;
-}
-
-/* This key on the parent re-triggers the animation for children */
-.menu-content {
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
+/* --- Category and Grid --- */
 .menu-category {
   margin-bottom: 60px;
 }
-
 .menu-category-title {
   font-size: clamp(1.5rem, 3vw, 2rem);
   color: #34495e;
-  margin-bottom: 30px;
-  padding-bottom: 10px;
+  margin-bottom: 25px;
   border-bottom: 2px solid #ff7a56;
   display: inline-block;
 }
@@ -76,36 +65,38 @@
   gap: 35px;
 }
 
+/* --- Pro Menu Card --- */
 .menu-card {
   background: #ffffff;
   border-radius: 16px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
   display: flex;
   flex-direction: column;
+  position: relative;
   transition: transform 0.1s linear, box-shadow 0.3s ease;
   transform-style: preserve-3d;
   opacity: 0;
   animation: slideUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
   animation-delay: calc(var(--animation-order) * 80ms);
 }
+@keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(40px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.card-image-placeholder {
-  height: 160px;
-  background: linear-gradient(135deg, #fdfbfb, #ebedee);
-  border-radius: 16px 16px 0 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+.card-image-container {
+  height: 200px;
   overflow: hidden;
+  border-radius: 16px 16px 0 0;
+}
+.menu-item-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease, filter 0.4s ease;
+}
+.menu-card:hover .menu-item-image {
+  transform: scale(1.1);
 }
 
-.card-bg-emoji { font-size: 80px; opacity: 0.9; }
+/* --- Card Content --- */
 .card-info-wrapper { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
 .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
 .menu-item-name { font-size: 1.3rem; font-weight: 600; color: #2c3e50; margin: 0; }
@@ -115,49 +106,48 @@
 .menu-item-description { font-size: 0.9rem; color: #7f8c8d; line-height: 1.5; margin-bottom: 15px; min-height: 40px; }
 .tags-container { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
 .tag-pill { background-color: #ecf0f1; color: #7f8c8d; padding: 4px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 500; }
-.card-footer { margin-top: auto; padding-top: 15px; border-top: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; }
+.card-footer { margin-top: auto; padding-top: 15px; border-top: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.card-footer .stock-count { font-style: italic; font-size: 0.85rem; color: #e67e22; margin: 0 auto 0 10px; }
 .menu-price { font-size: 1.4rem; color: #e67e22; font-weight: 700; margin: 0; }
-.menu-button { padding: 10px 20px; background-color: #ff7a56; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.9rem; transition: background-color 0.3s ease, transform 0.3s ease; }
-.menu-button:hover { background-color: #ff5722; transform: scale(1.05); }
-.menu-button.added { background-color: #2ecc71; cursor: not-allowed; transform: scale(1); }
+.menu-button { padding: 10px 20px; background-color: #ff7a56; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.9rem; }
+.menu-button.added { background-color: #2ecc71; }
 
+/* --- 👇 NEW, COOLER "OUT OF STOCK" STYLE 👇 --- */
+.menu-card.out-of-stock {
+  filter: grayscale(90%); /* Make the whole card black and white */
+  opacity: 0.6; /* Make it semi-transparent */
+  pointer-events: none; /* Disable all clicks and hovers */
+}
+.menu-card.out-of-stock .card-image-container {
+  position: relative;
+}
+/* Add a "Sold Out" text over the image for clarity */
+.menu-card.out-of-stock .card-image-container::after {
+  content: 'SOLD OUT';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+}
 
+/* --- Pizza Styles --- */
+.pizza-options { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; padding-top: 15px; border-top: 1px solid #f0f0f0; }
+.pizza-size { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; }
+.pizza-size span { font-weight: 500; color: #34495e; }
+.stock-count { font-size: 0.8rem; color: #7f8c8d; font-style: italic; }
+.pizza-size button { padding: 6px 12px; font-size: 0.8rem; background-color: #2ecc71; color: white; border: none; border-radius: 6px; cursor: pointer; }
+.pizza-size button:disabled { background-color: #bdc3c7; }
+.pizza-size button.added { background-color: #27ae60; }
+
+/* --- Search and Responsive Styles --- */
+.menu-card.highlighted { box-shadow: 0 0 0 3px #ff7a56, 0 10px 40px rgba(255, 87, 34, 0.4); transform: scale(1.05); }
+.no-results { text-align: center; padding: 50px; color: #7f8c8d; }
 @media (max-width: 768px) {
-  .menu-items-grid {
-    /* Change the grid to be a single column */
-    grid-template-columns: 1fr;
-  }
-
-  .menu-main-heading {
-    font-size: 2rem;
-  }
-
-  .tab-button {
-    padding: 10px 15px;
-    font-size: 1rem;
-  }
-}
-
-/* --- No Search Results Message --- */
-.no-results {
-  text-align: center;
-  padding: 50px;
-  color: #7f8c8d;
-}
-
-.no-results h3 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-}
-
-/* --- New Style for Highlighted Search Results --- */
-.menu-card.highlighted {
-  box-shadow: 0 0 0 3px #ff7a56, 0 10px 40px rgba(255, 87, 34, 0.4);
-  transform: scale(1.05); /* Make it slightly bigger */
-}
-
-.no-results {
-  text-align: center;
-  padding: 50px;
-  color: #7f8c8d;
+  .menu-items-grid { grid-template-columns: 1fr; }
 }

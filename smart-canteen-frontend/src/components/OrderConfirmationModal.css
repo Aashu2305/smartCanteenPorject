@@ -1,0 +1,85 @@
+.conf-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1300; /* Higher than payment modal */
+  backdrop-filter: blur(8px);
+}
+
+.conf-modal-box {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.25);
+  animation: zoomIn 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.conf-modal-icon {
+  font-size: 4.5rem;
+  color: #2ecc71;
+  margin-bottom: 20px;
+}
+
+.conf-modal-title {
+  font-size: 1.8rem;
+  color: #2c3e50;
+  margin: 0 0 15px 0;
+}
+
+.conf-modal-text {
+  font-size: 1rem;
+  color: #5a6778;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.conf-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.conf-modal-btn {
+  padding: 15px;
+  border-radius: 10px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.conf-modal-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.view-orders-btn {
+  background-color: #ff7a56;
+  color: white;
+}
+
+.continue-btn {
+  background-color: #ecf0f1;
+  color: #34495e;
+}

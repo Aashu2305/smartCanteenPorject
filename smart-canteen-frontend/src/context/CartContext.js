@@ -13,57 +13,75 @@ export const CartProvider = ({ children }) => {
   });
 
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [isToastVisible, setIsToastVisible] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('smart-canteen-cart', JSON.stringify(cart));
   }, [cart]);
 
+  const showToast = (message) => {
+    setToastMessage(message);
+    setIsToastVisible(true);
+    setTimeout(() => {
+      setIsToastVisible(false);
+    }, 3000); // Hide toast after 3 seconds
+  };
+  const hideToast = () => setIsToastVisible(false);
+
   const addToCart = (item) => {
+    const existingItem = cart.find((cartItem) => cartItem.cartId === item.cartId);
+    const currentQuantity = existingItem ? existingItem.quantity : 0;
+    
+    let maxStock = item.stockQuantity;
+    if (item.size === "Small") maxStock = item.stockSmall;
+    if (item.size === "Medium") maxStock = item.stockMedium;
+    if (item.size === "Large") maxStock = item.stockLarge;
+
+    if (currentQuantity >= maxStock) {
+      showToast(`No more stock for ${item.name}${item.size ? ` (${item.size})` : ''}.`);
+      return;
+    }
+
     setCart((prevCart) => {
-      const existingItem = prevCart.find((cartItem) => cartItem.id === item.id);
       if (existingItem) {
         return prevCart.map((cartItem) =>
-          cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
+          cartItem.cartId === item.cartId ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
         );
       }
       return [...prevCart, { ...item, quantity: 1 }];
     });
   };
 
-  const decreaseQuantity = (id) => {
+  const decreaseQuantity = (cartId) => {
     setCart((prevCart) => {
-      const existingItem = prevCart.find((cartItem) => cartItem.id === id);
+      const existingItem = prevCart.find((cartItem) => cartItem.cartId === cartId);
+      if (!existingItem) return prevCart;
       if (existingItem.quantity === 1) {
-        return prevCart.filter((cartItem) => cartItem.id !== id);
+        return prevCart.filter((cartItem) => cartItem.cartId !== cartId);
       }
       return prevCart.map((cartItem) =>
-        cartItem.id === id ? { ...cartItem, quantity: cartItem.quantity - 1 } : cartItem
+        cartItem.cartId === cartId ? { ...cartItem, quantity: cartItem.quantity - 1 } : cartItem
       );
     });
   };
-
-  const removeFromCart = (id) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== id));
-  };
   
-  const clearCart = () => {
-    setCart([]);
-  };
-
-  const toggleCart = () => {
-    setIsCartOpen(!isCartOpen);
-  };
+  const clearCart = () => setCart([]);
+  const toggleCart = () => setIsCartOpen(!isCartOpen);
 
   return (
     <CartContext.Provider 
       value={{ 
         cart, 
         addToCart, 
-        removeFromCart, 
         decreaseQuantity, 
         isCartOpen,
         toggleCart,
-        clearCart
+        clearCart,
+        toastMessage,
+        isToastVisible,
+        hideToast,
+        showToast // 👈 This is the crucial missing piece
       }}
     >
       {children}

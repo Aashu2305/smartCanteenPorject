@@ -9,6 +9,11 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    // New custom query to find all orders for a specific user
-    List<Order> findByUser(User user);
+
+    // 👇 This method name now tells Spring to sort the results automatically 👇
+    // findByUser...         -> Find all orders for this user
+    // ...OrderBy...         -> and sort them by...
+    // ...OrderTimestamp...  -> the 'orderTimestamp' field...
+    // ...Desc               -> in descending (newest first) order.
+    List<Order> findByUserOrderByOrderTimestampDesc(User user);
 }

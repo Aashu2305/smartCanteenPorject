@@ -1,98 +1,81 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Home.css';
-import IngredientModal from './IngredientModal';
+import RelatedItemsModal from './RelatedItemsModal'; 
+import { Link } from 'react-router-dom';
 
-// Data for all clickable, featured items in the hero section
+
 const featuredItems = {
   burger: {
-    name: 'Classic Burger',
+    name: 'Burger',
     emoji: '🍔',
-    ingredients: [
-      { name: 'Toasted Brioche ', emoji: '🍞' },
-      { name: '100% chicken ', emoji: '🥩' },
-      { name: 'Cheddar Cheese', emoji: '🧀' },
-      { name: 'Crisp Lettuce', emoji: '🥬' },
-      { name: 'Special Sauce', emoji: '🥫' },
-      { name: 'Fresh Tomato', emoji: '🍅' },
-    ],
+    relatedItems: [
+      { id: 10, name: 'Pizza', emoji: '🍕' },
+      { id: 36, name: 'Cup Noodles', emoji: '🍜' },
+      { id: 5, name: 'Veg Roll', emoji: '🌯' },
+    ]
   },
   fries: {
-    name: 'Crispy Fries',
+    name: 'Fries',
     emoji: '🍟',
-    ingredients: [
-      { name: 'Idaho Potatoes', emoji: '🥔' },
-      { name: 'Sea Salt', emoji: '🧂' },
-      { name: 'Vegetable Oil', emoji: '🌿' },
-    ],
+    relatedItems: [
+      { id: 1, name: 'Samosa', emoji: '🥟' },
+      { id: 3, name: 'Veg Patties', emoji: '🥧' },
+      { id: 7, name: 'Sandwich', emoji: '🥪' },
+    ]
   },
   soda: {
-    name: 'Fizzy Soda',
+    name: 'Soda',
     emoji: '🥤',
-    ingredients: [
-      { name: 'Carbonated Water', emoji: '💧' },
-      { name: 'Natural Fruit Flavor', emoji: '🍓' },
-      { name: 'A Hint of Sweetness', emoji: '🍬' },
-    ],
+    relatedItems: [
+      { id: 22, name: 'Cold Coffee', emoji: '🧋' },
+      { id: 26, name: 'Mango Juice', emoji: '🥭' },
+      { id: 23, name: 'Lassi', emoji: '🥛' },
+    ]
   },
   donut: {
-    name: 'Glazed Donut',
+    name: 'Donut',
     emoji: '🍩',
-    ingredients: [
-      { name: 'Fluffy Dough', emoji: '☁️' },
-      { name: 'Sweet Sugar Glaze', emoji: '✨' },
-      { name: 'Rainbow Sprinkles', emoji: '🎉' },
-    ],
+    relatedItems: [
+      { id: 12, name: 'Pastry', emoji: '🍰' },
+      { id: 13, name: 'Muffin', emoji: '🧁' },
+      { id: 16, name: 'Cheesecake', emoji: '🧀' },
+    ]
   },
 };
 
 function Home() {
-  // State for the parallax scroll effect
   const [offsetY, setOffsetY] = useState(0);
-  // State to manage which item's ingredient modal is open
   const [selectedItem, setSelectedItem] = useState(null);
-  // Ref for the hero section to calculate mouse position
   const heroRef = useRef(null);
 
-  // Effect to handle scroll events for parallax
   useEffect(() => {
     const handleScroll = () => setOffsetY(window.pageYOffset);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Handler for the 3D mouse-tilt effect
   const handleMouseMove = (e) => {
     if (!heroRef.current) return;
-
     const { clientX, clientY } = e;
     const { offsetWidth, offsetHeight, offsetLeft, offsetTop } = heroRef.current;
-    
     const x = clientX - (offsetLeft + offsetWidth / 2);
     const y = clientY - (offsetTop + offsetHeight / 2);
-    
-    const tiltFactor = 15;
-    const rotateY = (x / (offsetWidth / 2)) * tiltFactor;
-    const rotateX = (-1 * y / (offsetHeight / 2)) * tiltFactor;
-    
+    const tiltFactor = 3;
+    const rotateY = (x / (offsetWidth / 2)) * tiltFactor-2;
+    const rotateX = (x / (offsetWidth / 2)) * tiltFactor-2;
     const visualElement = heroRef.current.querySelector('.hero-visual');
     if (visualElement) {
-      visualElement.style.transform = `
-        perspective(1000px) 
-        rotateX(${rotateX}deg) 
-        rotateY(${rotateY}deg)
-      `;
+      visualElement.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
     }
   };
 
-  // Handler to reset the tilt effect when the mouse leaves
-  const handleMouseLeave = () => {
-    const visualElement = heroRef.current.querySelector('.hero-visual');
-    if (visualElement) {
-      visualElement.style.transform = `
-        perspective(1000px) 
-        rotateX(0deg) 
-        rotateY(0deg)
-      `;
+
+
+  const handleSmoothScroll = (e) => {
+    e.preventDefault();
+    const menuSection = document.getElementById('menu');
+    if (menuSection) {
+      menuSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
@@ -103,7 +86,7 @@ function Home() {
         className="hero-section"
         ref={heroRef}
         onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
+        // onMouseLeave={handleMouseLeave}
       >
         <div className="hero-content">
           <h1 className="hero-headline">
@@ -114,45 +97,28 @@ function Home() {
             Freshly prepared meals, snacks, and beverages. Order online with the
             Smart Canteen and skip the queue forever.
           </p>
-          <a href="#menu" className="hero-cta-button">
+
+
+          <Link to="/#menu" state={{ timestamp: Date.now() }} className="hero-cta-button">
             Explore Menu
-          </a>
+          </Link>
+
+
         </div>
 
         <div
           className="hero-visual"
           style={{ transform: `translateY(${offsetY * 0.3}px)` }}
         >
-          <div
-            className="floating-icon icon-1"
-            onClick={() => setSelectedItem(featuredItems.burger)}
-          >
-            🍔
-          </div>
-          <div
-            className="floating-icon icon-2"
-            onClick={() => setSelectedItem(featuredItems.fries)}
-          >
-            🍟
-          </div>
-          <div
-            className="floating-icon icon-3"
-            onClick={() => setSelectedItem(featuredItems.soda)}
-          >
-            🥤
-          </div>
-          <div
-            className="floating-icon icon-4"
-            onClick={() => setSelectedItem(featuredItems.donut)}
-          >
-            🍩
-          </div>
+          <div className="floating-icon icon-1" onClick={() => setSelectedItem(featuredItems.burger)}>🍔</div>
+          <div className="floating-icon icon-2" onClick={() => setSelectedItem(featuredItems.fries)}>🍟</div>
+          <div className="floating-icon icon-3" onClick={() => setSelectedItem(featuredItems.soda)}>🥤</div>
+          <div className="floating-icon icon-4" onClick={() => setSelectedItem(featuredItems.donut)}>🍩</div>
         </div>
       </section>
 
-      {/* Conditionally render the ingredient modal */}
       {selectedItem && (
-        <IngredientModal
+        <RelatedItemsModal
           item={selectedItem}
           onClose={() => setSelectedItem(null)}
         />

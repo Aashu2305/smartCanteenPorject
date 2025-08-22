@@ -7,10 +7,11 @@ import com.example.smart_canteen_backend.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+// The @CrossOrigin import is now removed
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:3000")
+// The @CrossOrigin annotation is now removed from here
 public class AuthController {
 
     private final AuthService authService;
@@ -25,7 +26,6 @@ public class AuthController {
         return authService.registerUser(user);
     }
 
-    // 👇 New endpoint for user login
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
         try {

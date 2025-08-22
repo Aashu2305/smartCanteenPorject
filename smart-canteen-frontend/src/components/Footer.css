@@ -1,13 +1,14 @@
 .footer-container {
-  background-color: #2c3e50; /* Dark blue-gray background */
+  background-color: #2c3e50;
   color: #ecf0f1;
   padding: 50px 5%;
-  border-top: 5px solid #ff7a56; /* Accent color border */
+  border-top: 5px solid #ff7a56;
 }
 
 .footer-content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  /* Updated to better handle 4 columns */
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 40px;
   max-width: 1200px;
   margin: 0 auto;
@@ -29,6 +30,20 @@
 .footer-section p {
   color: #bdc3c7;
   line-height: 1.7;
+  margin: 0 0 10px 0;
+}
+
+.canteen-hours {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #34495e;
+}
+.canteen-hours p {
+    font-size: 0.9rem;
+    color: #fff;
+}
+.canteen-hours strong {
+    color: #ff7a56;
 }
 
 .footer-section.links ul {

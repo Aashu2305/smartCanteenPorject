@@ -1,22 +1,27 @@
+/* --- YOUR HERO SECTION RULE (UNCHANGED) --- */
 .hero-section {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 5%;
-  height: 90vh;
-  padding-top: 120px;
-  background: linear-gradient(180deg, #fffaf5, #fff0e1);
-  overflow: hidden;
-  position: relative;
 
-  /* This is crucial for the 3D effect to work */
-  perspective: 1000px;
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5%;
+    height: 100vh;
+    padding-top: 60px;
+    background: linear-gradient(180deg, #f6f4e8, #f7c491);
+    overflow: hidden;
+    perspective: 1000px;
+    
 }
+
 
 .hero-content {
   flex: 1;
   padding-right: 40px;
-  z-index: 2;
+  z-index: 2; /* Ensure content is on top of the background */
   animation: fadeInFromLeft 0.8s ease-out;
 }
 
@@ -54,34 +59,40 @@
   animation-play-state: paused;
 }
 
-/* --- The Visuals and Animations --- */
-
 .hero-visual {
   flex: 1;
   position: relative;
   height: 100%;
-
-  /* This tells the container to respect 3D transformations of its children */
   transform-style: preserve-3d;
-  /* This makes the tilt effect smooth */
   transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: 2; /* Ensure visual is on top of the background */
 }
 
 .floating-icon {
   position: absolute;
   font-size: 5rem;
-  text-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  /* The icons will now inherit their floating animation from the parent's transform */
+  text-shadow: 0 10px 25px rgba(159, 81, 81, 0.15);
   animation: float 10s ease-in-out infinite;
+  transition: filter 0.3s ease, transform 0.3s ease; /* Transition for the glow */
+  cursor: pointer;
 }
 
+/* 👇 NEW HOVER GLOW EFFECT FOR ICONS 👇 */
+.floating-icon:hover {
+  filter: drop-shadow(0 0 20px rgba(57, 214, 133, 0.8)); /* A warm yellow glow */
+  transform: scale(2.1) !important; /* Use important to override other transforms */
+}
 
 /* Adjust icon positions and animations if needed */
-.icon-1 { top: 10%; left: 20%; animation-duration: 12s; }
+.icon-1 { top: 24%; left: 10%; animation-duration: 6s; }
 .icon-2 { top: 30%; left: 60%; animation-duration: 15s; font-size: 4rem; animation-delay: -3s; }
 .icon-3 { top: 65%; left: 30%; animation-duration: 10s; font-size: 6rem; animation-delay: -7s; }
 .icon-4 { top: 50%; left: 80%; animation-duration: 13s; font-size: 3.5rem; animation-delay: -5s; }
 
+@keyframes twinkle-stars {
+  from { background-position: 0 0, 40px 60px, 70px 100px; }
+  to { background-position: -550px 0, -350px 0, -150px 0; }
+}
 
 @keyframes fadeInFromLeft {
   from { opacity: 0; transform: translateX(-30px); }
@@ -101,20 +112,17 @@
 }
 
 @media (max-width: 768px) {
-  /* Inside your @media (max-width: 768px) rule */
-
-.hero-section {
-  flex-direction: column;
-  height: auto;
-  padding: 150px 5% 190px 5%;
-  text-align: center;
-  align-items: center; /* 👇 THIS IS THE FIX 👇 */
-}
+  .hero-section {
+    flex-direction: column;
+    height: auto;
+    padding: 150px 5% 190px 5%;
+    text-align: center;
+    align-items: center;
+  }
   .hero-content {
     padding-right: 0;
     margin-bottom: 40px;
   }
-
   .hero-visual {
     height: 300px;
     width: 100%;
